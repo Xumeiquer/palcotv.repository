@@ -1,11 +1,11 @@
-palcoTV 0.1beta
+PalcoTV 0.1beta
 
 - Versión inicial
-- Muchísimos errores de principiante ;)
+- Muchísimos errores ;)
 
 
 
-palcoTV 0.2beta
+PalcoTV 0.2beta
 
 - Corregido error que impedía arrancar en Android
 - Se pueden lanzar los enlaces Acestreams (gracias a P2P-Streams, de enen92)
@@ -14,7 +14,7 @@ palcoTV 0.2beta
 
 
 
-palcoTV 0.2.5
+PalcoTV 0.2.5
 
 - Soporte de listas M3U de SimpleTV
 - Nueva biblioteca de listas M3U.- Añadido enlace al tutorial para torpes en Youtube ;)
@@ -24,7 +24,7 @@ palcoTV 0.2.5
 
 
 
-palcoTV 0.2.6
+PalcoTV 0.2.6
 
 - Añadido buscador de canales en las listas M3U
 - Ahora se descargan las listas y se abren automáticamente
@@ -32,13 +32,13 @@ palcoTV 0.2.6
 
 
 
-palcoTV 0.2.6
+PalcoTV 0.2.61
 
 - Se corrige un bug crítico por el que muchos canales rtmp no se reproducen
 
 
 
-palcoTV 0.2.7
+PalcoTV 0.2.7
 
 - Mejorado el comportamiento del buscador (por el momento, sólo las listas M3U descargadas)
 - Agregada agenda de programación TV con eventos de fútbol de la TV de España, Italia y Reino Unido
@@ -48,7 +48,7 @@ palcoTV 0.2.7
 
 
 
-palcoTV 0.2.8
+PalcoTV 0.2.8
 
 - Agregada la agenda de programación de fútbolenlaTV.com
 - Búsquedas en la agenda cuando hay varios canales de emisión
@@ -59,9 +59,32 @@ palcoTV 0.2.8
 - Las listas se guardan con su extensión correspondiente (*.M3U, *.PLX, *.P2P)
 
 
-palcoTV 0.2.85
+
+PalcoTV 0.2.85
 
 - Soporte de canales de Movistar TV (utilizando la conexión del abonado)
 - Soporte de thumbnails, fanarts y comentarios en las listas P2P, tanto por defecto en la lista como para cada entrada
+
+
+
+PalcoTV 0.2.86
+
+- Soporte de listas JSN
+- Corregido error por el cuál las listas se descargaban erróneamente en "Mis listas" por el formato entre corchetes (negrita, color, cursiva)
+
+
+
+PalcoTV 0.2.9
+
+- Conectores de Allmyvideos, Streamcloud, Played.to y Vidspot
+- Soporte de enlaces cortos de más de 340 servicios de acortadores de enlaces
+- Soporte de vídeos y canales de usuarios de Youtube
+- Mejorado el parseo de listas JSN y PLX y mejorado el formato de presentación de listas y canales
+- La carpeta "mis listas" pasa a ubicarse en XBMC/addons para evitar que se borren las listas al actualizar el addon
+- Añadido control parental sobre las listas de adultos
+- Añadidas nuevas listas de películas, documentales y deportes
+- Varios bugs menores corregidos
+
+
 
 
