@@ -21,6 +21,7 @@ import xbmcaddon
 import xbmcplugin
 
 import plugintools
+from resolvers import *
 
 tools = xbmc.translatePath(os.path.join('special://home/addons/plugin.video.palcotv-wip/tools', ''))
 art = xbmc.translatePath(os.path.join('special://home/addons/plugin.video.palcotv/art', ''))
