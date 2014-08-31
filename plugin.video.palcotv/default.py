@@ -22,8 +22,9 @@ import xbmcplugin
 
 import plugintools
 from resolvers import *
+from update import *
 
-tools = xbmc.translatePath(os.path.join('special://home/addons/plugin.video.palcotv-wip/tools', ''))
+tools = xbmc.translatePath(os.path.join('special://home/addons/plugin.video.palcotv/tools', ''))
 art = xbmc.translatePath(os.path.join('special://home/addons/plugin.video.palcotv/art', ''))
 tmp = xbmc.translatePath(os.path.join('special://home/addons/plugin.video.palcotv/tmp', ''))
 playlists = xbmc.translatePath(os.path.join('special://home/addons/playlists', ''))
@@ -53,14 +54,13 @@ def run():
 
     plugintools.close_item_list()
 
-   
-       
+
   
 # Main menu
 
 def main_list(params):
     plugintools.log("palcoTV.main_list "+repr(params))
-    data = plugintools.read("https://dl.dropboxusercontent.com/u/8036850/palcotv029.xml")
+    data = plugintools.read("http://pastebin.com/raw.php?i=JCztjffj")
 
     set_view()
 
@@ -81,7 +81,7 @@ def main_list(params):
         date = plugintools.find_single_match(entry,'<date>(.*?)</date>')
         plugintools.add_item( action="" , title = title + date , fanart = art+'fanart.jpg' , thumbnail=art+'icon.png' , folder = False , isPlayable = False )
 
-    data = plugintools.read("https://dl.dropboxusercontent.com/u/8036850/palcotv029.xml")        
+    data = plugintools.read("http://pastebin.com/raw.php?i=JCztjffj")        
     matches = plugintools.find_multiple_matches(data,'<channel>(.*?)</channel>')
     for entry in matches:
         title = plugintools.find_single_match(entry,'<name>(.*?)</name>')
@@ -92,12 +92,12 @@ def main_list(params):
         url = plugintools.find_single_match(entry,'<url>(.*?)</url>')
         date = plugintools.find_single_match(entry,'<last_update>(.*?)</last_update>')
 
-        # Control parental
+        # Control paternal
         pekes_no = plugintools.get_setting("pekes_no")
         if pekes_no == "true" :
-            print "Control parental en marcha"
+            print "Control paternal en marcha"
             if title.find("Adultos") >= 0 :
-                plugintools.log("Activando control parental...")
+                plugintools.log("Activando control paternal...")
             else:
                 fixed = title
                 plugintools.add_item( action = action , plot = fixed , title = '[COLOR lightyellow]' + fixed + '[/COLOR]' , fanart = fanart , thumbnail = thumbnail , url = url , folder = True , isPlayable = False )
@@ -179,16 +179,16 @@ def xml_lists(params):
 
     plugintools.add_item( action="" , title='[B][COLOR yellow]'+name_channel+'[/B][/COLOR]' , thumbnail= art + 'special.png' , fanart = fanart , folder = False , isPlayable = False )
     
-    # Control parental
+    # Control paternal
     pekes_no = plugintools.get_setting("pekes_no")
     
     subchannel = re.compile('<subchannel>([^<]+)<name>([^<]+)</name>([^<]+)<thumbnail>([^<]+)</thumbnail>([^<]+)<fanart>([^<]+)</fanart>([^<]+)<action>([^<]+)</action>([^<]+)<url>([^<]+)</url>([^<]+)</subchannel>').findall(data)
     for biny, ciny, diny, winy, pixy, dixy, boxy, susy, lexy, muny, kiny in subchannel:
 
         if pekes_no == "true" :
-            print "Control parental en marcha"
+            print "Control paternal en marcha"
             if ciny.find("XXX") >= 0 :
-                plugintools.log("Activando control parental...")
+                plugintools.log("Activando control paternal...")
             else:
                 plugintools.add_item( action = susy , title = ciny , url= muny , thumbnail = winy , fanart = dixy , extra = dixy , page = dixy , folder = True , isPlayable = False )
                 params["fanart"]=dixy
@@ -215,20 +215,7 @@ def getstreams_now(params):
         url = plugintools.find_single_match(entry,'<link> ([^<]+)')
         plugintools.add_item( action="play" , title=title , url=url , folder = False , isPlayable = True )
         
-      
-def p2plinks(params):
-    plugintools.log("palcoTV.livetv "+repr(params))
-      
-    data = plugintools.read( params.get("url") )
-    matches = plugintools.find_multiple_matches(data,'<item>(.*?)</item>')
-    for entry in matches:
-        title = plugintools.find_single_match(entry,'<title>(.*?)</title>')
-        thumbnail = plugintools.find_single_match(entry,'<thumbnail>(.*?)</thumbnail>')
-        ace_url = plugintools.find_single_match(entry,'<link>(.*?)</link>')
-        last_update = plugintools.find_single_match(entry,'<date>(.*?)</date>')
-        url = 'plugin://plugin.video.p2p-streams/?url=' + ace_url + '&mode=1&name=' + title + ')'
-        plugintools.add_item( action="play" , title='[COLOR white]'+title+'[/COLOR]' , url=url , thumbnail=art + thumbnail , fanart = art + 'fanart.jpg' , folder = False , isPlayable = True )
-        
+     
 
 # Soporte de listas de canales por categorías (Livestreams, XBMC México, Motor SportsTV, etc.). 
 
@@ -970,7 +957,7 @@ def myplaylists_m3u(params):  # Mis listas M3U
     
     ficheros = os.listdir(playlists)  # Lectura de archivos en carpeta /playlists. Cuidado con las barras inclinadas en Windows
 
-    # Control parental
+    # Control paternal
     pekes_no = plugintools.get_setting("pekes_no")
     
     for entry in ficheros:
@@ -979,9 +966,9 @@ def myplaylists_m3u(params):  # Mis listas M3U
         plugintools.log("entry= "+entry)
 
         if pekes_no == "true" :
-            print "Control parental en marcha"
+            print "Control paternal en marcha"
             if entry.find("XXX") >= 0 :
-                plugintools.log("Activando control parental...")
+                plugintools.log("Activando control paternal...")
                 
             else:                
                 if entry.endswith("plx") == True:  # Control para según qué extensión del archivo se elija thumbnail y función a ejecutar
@@ -1088,6 +1075,7 @@ def parse_url(url):
     
     else:
         plugintools.log("error en url= ")  # Mostrar diálogo de error al parsear url (por no existir, por ejemplo)
+
         
                     
 def getfile_url(params):
@@ -1867,9 +1855,9 @@ def plx_items(params):
                     print i
                     continue
                 elif data.startswith("background") == True:
-                    fanart = data.replace("background=", "")
-                    fanart = fanart.strip()
-                    fanart = data
+                    data = data.replace("background=", "")
+                    fanart = data.strip()
+                    plugintools.log("fanart= "+fanart)
                     data = file.readline()
                     data = data.strip()
                     i = i + 1
@@ -2319,17 +2307,17 @@ def get_fecha():
 def p2p_items(params):
     plugintools.log("palcoTV.p2p_items" +repr(params))
     
-    # Vamos a localizar el thumbnail 
+    # Vamos a localizar el título 
     title = params.get("plot")
     if title == "":
         title = params.get("title")
         
-    data = plugintools.read("https://dl.dropboxusercontent.com/u/8036850/palcotv029.xml")
+    data = plugintools.read("http://pastebin.com/raw.php?i=JCztjffj")
     subcanal = plugintools.find_single_match(data,'<name>' + title + '(.*?)</subchannel>')
     thumbnail = plugintools.find_single_match(subcanal, '<thumbnail>(.*?)</thumbnail>')
     fanart = plugintools.find_single_match(subcanal, '<fanart>(.*?)</fanart>')
     plugintools.log("thumbnail= "+thumbnail)
-    filename = title + '.p2p'
+
 
     # Controlamos el caso en que no haya thumbnail en el menú de PalcoTV
     if thumbnail == "":
@@ -2342,20 +2330,24 @@ def p2p_items(params):
 
     # Comprobamos si la lista ha sido descargada o no
     plot = params.get("plot")
-    if plot != "":
+    
+    if plot == "":
+        title = params.get("title")
+        title = parser_title(title)
+        filename = title + '.p2p'
+        getfile_url(params)        
+    else:
         print "Lista ya descargada (plot no vacío)"
         filename = params.get("plot")
         params["ext"] = 'p2p'
         params["plot"]=filename
-        plugintools.log("Lectura del archivo P2P")
-        title = title + '.p2p'
-    else:
-        getfile_url(params)
-        title = params.get("title")
-        title = title + '.p2p'
+        filename = filename + '.p2p'
+        plugintools.log("Lectura del archivo P2P")        
+
+    plugintools.add_item(action="" , title='[COLOR lightyellow][I][B]' + title + '[/B][/I][/COLOR]' , thumbnail=thumbnail , fanart=fanart , folder=False, isPlayable=False)
 
     # Abrimos el archivo P2P y calculamos número de líneas        
-    file = open(playlists + title, "r")
+    file = open(playlists + filename, "r")
     file.seek(0)
     data = file.readline()
     num_items = len(file.readlines())
@@ -2413,7 +2405,7 @@ def p2p_items(params):
                 # plugin://plugin.video.p2p-streams/?url=sop://124.232.150.188:3912/11265&mode=2&name=Titulo+canal+Sopcast
                 title_fixed = title.replace(" " , "+")
                 url = 'plugin://plugin.video.p2p-streams/?url=' + data + '&mode=2&name=' + title_fixed
-                plugintools.add_item(action="play" , title = title + ' [COLOR indianred][Sopcast][/COLOR]' , url = url, thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
+                plugintools.add_item(action="play" , title = title + ' [COLOR lightgreen][Sopcast][/COLOR]' , url = url, thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
                 data = file.readline()
                 data = data.strip()
                 i = i + 1
@@ -2763,6 +2755,8 @@ def parser_title(title):
     cyd = cyd.replace("[COLOR olive]", "")
     cyd = cyd.replace("[COLOR khaki]", "")
     cyd = cyd.replace("[COLOR lightsalmon]", "")
+    cyd = cyd.replace("[COLOR orange]", "")
+    cyd = cyd.replace("[COLOR lightgreen]", "")
     cyd = cyd.replace("[COLOR lightblue]", "")
     cyd = cyd.replace("[COLOR lightpink]", "")
     cyd = cyd.replace("[COLOR skyblue]", "")
@@ -2779,6 +2773,7 @@ def parser_title(title):
     cyd = cyd.replace("[/I]", "")
     cyd = cyd.replace("[Auto]", "")
     cyd = cyd.replace("[TinyURL]", "")
+    cyd = cyd.replace("[Auto]", "")
 
     title = cyd
     title = title.strip()
@@ -2966,13 +2961,41 @@ def server_rtmp(params):
     url = params.get("url")
     plugintools.log("URL= "+url)
     
-    if url.find("iguide") >= 0:
+    if url.find("iguide.to") >= 0:
         params["server"] = 'iguide'
+        return params
+
+    elif url.find("direct2watch") >= 0:
+        params["server"] = 'direct2watch'
+        return params
+
+    elif url.find("everyon") >= 0:
+        params["server"] = 'everyon'
+        return params
+
+    elif url.find("iviplanet") >= 0:
+        params["server"] = 'iviplanet'
         return params    
+
+    elif url.find("cxnlive") >= 0:
+        params["server"] = 'cxnlive'
+        return params      
 
     elif url.find("ucaster") >= 0:
         params["server"] = 'ucaster'
         return params
+
+    elif url.find("mediapro") >= 0:
+        params["server"] = 'mediapro'
+        return params
+
+    elif url.find("veemi") >= 0:
+        params["server"] = 'veemi'
+        return params
+
+    elif url.find("yukons.net") >= 0:
+        params["server"] = 'yukons.net'
+        return params      
 
     elif url.find("hdcast") >= 0:
         params["server"] = 'hdcast'
@@ -3330,6 +3353,15 @@ def longurl(params):
         play(params)
 
 
+
+def opentxt(self):
+
+    texto = xbmcgui.ControlTextBox (100, 250, 300, 300, textColor='0xFFFFFFFF')
+    texto.setText('log.txt')
+
+    texto.setVisible(window)
+     
+    
 
 
 
