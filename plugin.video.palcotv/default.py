@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #------------------------------------------------------------
 # PalcoTV - XBMC Add-on by Juarrox (juarrox@gmail.com)
-# Version 0.2.9 (18.07.2014)
+# Version 0.2.91 (01.09.2014)
 #------------------------------------------------------------
 # License: GPL (http://www.gnu.org/licenses/gpl-3.0.html)
 # Gracias a la librería plugintools de Jesús (www.mimediacenter.info)
@@ -3361,6 +3361,12 @@ def opentxt(self):
 
     texto.setVisible(window)
      
+
+def arenavision_parser(params):
+    plugintools.log("PalcoTV.arenavision_parser "+repr(params))
+    url = params.get("http://go.arenavision.in")
+    data = plugintools.read(url)
+    plugintools.log("data= "+data)    
     
 
 
