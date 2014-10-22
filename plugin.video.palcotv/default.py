@@ -547,8 +547,16 @@ def simpletv_items(params):
                 if data.startswith("http") == True:
                     url = data.strip()
                     if cat != "":  # Controlamos el caso de subcategoría de canales
-                        if busqueda == 'search.txt':                            
-                            if url.find("allmyvideos") >= 0:
+                        if busqueda == 'search.txt':
+                            if url.startswith("serie") == True:
+                                url = url.replace("serie:", "")
+                                params["fanart"] = fanart
+                                plugintools.log("fanart= "+fanart)
+                                plugintools.add_item( action = "seriecatcher" , title = '[COLOR white]' + title + ' [COLOR purple][Serie online][/COLOR][COLOR lightsalmon](' + origen + ')[/I][/COLOR]' , url = url , thumbnail = thumbnail , fanart = fanart , folder = True , isPlayable = False )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            elif url.find("allmyvideos") >= 0:
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()
@@ -602,21 +610,19 @@ def simpletv_items(params):
                                 i = i + 1
                                 continue                            
 
-                            elif url.find("video?=") >= 0:  # Video youtube
+                            elif url.find("www.youtube.com") >= 0:  # Video youtube
                                 plugintools.log("linea titulo= "+title_search)
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()
-                                # plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=n1jS-esrBU4
-                                # https://www.youtube.com/video?=n1jS-esrBU4
-                                videoid = url.replace("https://www.youtube.com/video?=", "")
+                                videoid = url.replace("https://www.youtube.com/watch?=", "")
                                 url = 'plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=' + videoid
                                 plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [[COLOR red]You[COLOR white]tube Video][I] (' + origen + ')[/I][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
 
-                            elif url.endswith("m3u8") >= 0:
+                            elif url.endswith("m3u8") == True:
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()                            
@@ -638,7 +644,7 @@ def simpletv_items(params):
                                 url = url.replace("serie:", "")
                                 params["fanart"] = fanart
                                 plugintools.log("fanart= "+fanart)
-                                plugintools.add_item( action = "seriecatcher" , title = '[COLOR white]' + title + ' [COLOR purple][Serie online][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = True , isPlayable = False )
+                                plugintools.add_item( action = "seriecatcher" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + ' [COLOR purple][Serie online][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = True , isPlayable = False )
                                 data = file.readline()
                                 i = i + 1
                                 continue
@@ -673,29 +679,43 @@ def simpletv_items(params):
                                 i = i + 1
                                 continue                        
 
-                            elif url.find("video?=") >= 0:  # Video youtube
-                                plugintools.log("linea titulo= "+title_search)
+                            elif url.find("www.youtube.com") >= 0:  # Video youtube
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()
-                                # plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=n1jS-esrBU4
-                                # https://www.youtube.com/video?=n1jS-esrBU4
-                                videoid = url.replace("https://www.youtube.com/video?=", "")
+                                videoid = url.replace("https://www.youtube.com/watch?=", "")
                                 url = 'plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=' + videoid
-                                plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [[COLOR red]You[COLOR white]tube Video][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + ' [[COLOR red]You[COLOR white]tube Video][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
-                                continue                            
+                                continue
+
+                            elif url.endswith("m3u8") == True:
+                                title = title.split('"')
+                                title = title[0]
+                                title = title.strip()                            
+                                plugintools.add_item( action = "playedto" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR purple] [m3u8][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                             
 
                             else:                            
                                 plugintools.add_item( action = "longurl" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR blue] [HTTP][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
-                            
+                    # Sin categoría de canales   
                     else:
                         if busqueda == 'search.txt':
-                            if url.find("allmyvideos") >= 0:
+                            if url.startswith("serie") == True:
+                                url = url.replace("serie:", "")
+                                params["fanart"] = fanart
+                                plugintools.log("fanart= "+fanart)
+                                plugintools.add_item( action = "seriecatcher" , title = '[COLOR white]' + title + ' [COLOR purple][Serie online][/COLOR][COLOR lightsalmon](' + origen + ')[/I][/COLOR]' , url = url , thumbnail = thumbnail , fanart = fanart , folder = True , isPlayable = False )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            elif url.find("allmyvideos") >= 0:
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()                             
@@ -749,52 +769,60 @@ def simpletv_items(params):
                                 i = i + 1
                                 continue                             
 
-                            elif url.find("video?=") >= 0:
+                            elif url.find("www.youtube.com") >= 0:
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()
-                                videoid = url.replace("https://www.youtube.com/video?=", "")
+                                videoid = url.replace("https://www.youtube.com/watch?=", "")
                                 url = 'plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=' + videoid                            
                                 plugintools.add_item( action = "youtube_videos" , title = '[COLOR white][' + title + ' [[COLOR red]You[/COLOR][COLOR white]tube Video][I] (' + origen + ')[/I][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
-                                continue                          
+                                continue
+                            elif url.endswith("m3u8") == True:
+                                title = title.split('"')
+                                title = title[0]
+                                title = title.strip()                            
+                                plugintools.add_item( action = "playedto" , title = '[COLOR white]' + title + ' [COLOR purple][m3u8][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                             
                             
                             else:                      
                                 title = title_search[0]
                                 title = title.strip()                             
-                                plugintools.add_item( action = "longurl" , title = '[COLOR white]' + title + '[COLOR blue] [HTTP][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "longurl" , title = '[COLOR white]' + title + ' [COLOR blue][HTTP][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
 
                         else:
                             if url.find("allmyvideos") >= 0:                                
-                                plugintools.add_item( action = "allmyvideos" , title = '[COLOR white]' + title + '[COLOR lightyellow] [Allmyvideos][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "allmyvideos" , title = '[COLOR white]' + title + ' [COLOR lightyellow][Allmyvideos][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
 
                             elif url.find("streamcloud") >= 0:                             
-                                plugintools.add_item( action = "streamcloud" , title = '[COLOR white]' + title + '[COLOR lightskyblue] [Streamcloud][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "streamcloud" , title = '[COLOR white]' + title + ' [COLOR lightskyblue][Streamcloud][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
 
                             elif url.find("vidspot") >= 0:                            
-                                plugintools.add_item( action = "vidspot" , title = '[COLOR white]' + title + '[COLOR palegreen] [Vidspot][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "vidspot" , title = '[COLOR white]' + title + ' [COLOR palegreen][Vidspot][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
                             
                             elif url.find("played.to") >= 0:                            
-                                plugintools.add_item( action = "playedto" , title = '[COLOR white]' + title + '[COLOR lavender] [Played.to][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "playedto" , title = '[COLOR white]' + title + ' [COLOR lavender][Played.to][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
 
                             elif url.find("vk.com") >= 0:                            
-                                plugintools.add_item( action = "vk" , title = '[COLOR white]' + title + '[COLOR royalblue] [Vk][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "vk" , title = '[COLOR white]' + title + ' [COLOR royalblue][Vk][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
@@ -803,24 +831,31 @@ def simpletv_items(params):
                                 plugintools.add_item( action = "nowvideo" , title = '[COLOR white]' + title + '[COLOR red] [Nowvideo][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
-                                continue                              
-                            
-                            elif url.find("youtube") >= 0:
-                                print "youtube video"
-                                videoid = url.split("=")
-                                if len(videoid) == 0:
-                                    videoid = ""
-                                else:
-                                    videoid = videoid[0]
+                                continue
+
+                            elif url.find("www.youtube.com") >= 0:
+                                title = title.split('"')
+                                title = title[0]
+                                title = title.strip()
+                                videoid = url.replace("https://www.youtube.com/watch?v=", "")
+                                print 'videoid',videoid
                                 url = 'plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=' + videoid                            
-                                plugintools.add_item( action = "youtube_videos" , title = '[COLOR white]' + title + ' [COLOR white][[COLOR red]You[/COLOR][COLOR white]tube Video][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "youtube_videos" , title = '[COLOR white]' + title + ' [[COLOR red]You[/COLOR][COLOR white]tube Video][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
-                                continue                         
+                                continue
+                            
+                            elif url.endswith("m3u8") == True:
+                                title = title.split('"')
+                                title = title[0]
+                                title = title.strip()                            
+                                plugintools.add_item( action = "playedto" , title = '[COLOR white]' + title + ' [COLOR purple][m3u8][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                             
                             
                             else:
-
-                                plugintools.add_item( action = "longurl" , title = '[COLOR red][I]' + '[/I][/COLOR][COLOR white]' + title + '[COLOR blue] [HTTP][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "longurl" , title = '[COLOR red][I]' + '[/I][/COLOR][COLOR white]' + title + ' [COLOR blue][HTTP][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
@@ -943,111 +978,219 @@ def simpletv_items(params):
                     title = title.strip()
                     title = title.replace("#EXTINF:-1,", "")
                     url = data
+                    url = url.strip()
 
                     if url.find("youtube") >= 0 :
-                        if busqueda == 'search.txt':
-                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[[COLOR white] You[COLOR red]Tube[/COLOR][COLOR white] Video[/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = art + "icon.png" , fanart = art + 'fanart.jpg' , folder = False , isPlayable = True )
-                            data = file.readline()
-                            i = i + 1
-                            continue
+                        if cat != "":                      
+                            if busqueda == 'search.txt':
+                                plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR white] [You[COLOR red]Tube[/COLOR][COLOR white] Video][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = art + "icon.png" , fanart = art + 'fanart.jpg' , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            else:
+                                plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR white] [You[COLOR red]Tube[/COLOR][COLOR white] Video][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
                         else:
-                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[[COLOR white] You[COLOR red]Tube[/COLOR][COLOR white] Video[/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
-                            data = file.readline()
-                            i = i + 1
-                            continue
+                            if busqueda == 'search.txt':
+                                plugintools.add_item( action = "play" , title = '[COLOR white] ' + title + '[COLOR white] [You[COLOR red]Tube[/COLOR][COLOR white] Video][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = art + "icon.png" , fanart = art + 'fanart.jpg' , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            else:
+                                plugintools.add_item( action = "play" , title = '[COLOR white] ' + title + '[COLOR white] [You[COLOR red]Tube[/COLOR][COLOR white] Video][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                            
                         
                     elif url.find("mode=1") >= 0 :
-                        if busqueda == 'search.txt':
-                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [COLOR lightblue] [Acestream][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
-                            data = file.readline()
-                            i = i + 1
-                            continue                        
+                        if cat != "":
+                            if busqueda == 'search.txt':
+                                plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + ' [COLOR lightblue] [Acestream][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            else:
+                                plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR lightblue] [Acestream][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
                         else:
-                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[COLOR lightblue] [Acestream][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
-                            data = file.readline()
-                            i = i + 1
-                            continue
+                            if busqueda == 'search.txt':
+                                plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [COLOR lightblue] [Acestream][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            else:
+                                plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[COLOR lightblue] [Acestream][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                            
                         
                     elif url.find("mode=2") >= 0 :
+                        if cat != "":
+                            if busqueda == 'search.txt':
+                                plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + ' [COLOR darkorange] [Sopcast][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            else:
+                                plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR darkorange] [Sopcast][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                        else:
+                            if busqueda == 'search.txt':
+                                plugintools.add_item( action = "play" , title = '[COLOR white] ' + title + ' [COLOR darkorange] [Sopcast][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            else:
+                                plugintools.add_item( action = "play" , title = '[COLOR white] ' + title + '[COLOR darkorange] [Sopcast][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+                            
+                elif data.startswith("magnet") == True:
+                    if cat != "":
                         if busqueda == 'search.txt':
-                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [COLOR darkorange] [Sopcast][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                            # plugin://plugin.video.xbmctorrent/play/ + <magnet_link>
+                            url_fixed = urllib.quote_plus(data)
+                            title = parser_title(title)
+                            url = 'plugin://plugin.video.xbmctorrent/play/' + url_fixed
+                            plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR orangered] [Torrent][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                             data = file.readline()
                             i = i + 1
-                            continue                        
+                            continue
                         else:
-                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[COLOR darkorange] [Sopcast][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                            # plugin://plugin.video.xbmctorrent/play/ + <magnet_link>
+                            title = parser_title(title)
+                            data = data.strip()
+                            url_fixed = urllib.quote_plus(data)                      
+                            title = parser_title(title)                        
+                            url = 'plugin://plugin.video.xbmctorrent/play/' + url_fixed
+                            plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + ' [COLOR orangered][Torrent][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                            data = file.readline()
+                            i = i + 1
+                            continue
+                    else:
+                        if busqueda == 'search.txt':
+                            # plugin://plugin.video.xbmctorrent/play/ + <magnet_link>
+                            url_fixed = urllib.quote_plus(data)
+                            title = parser_title(title)
+                            url = 'plugin://plugin.video.xbmctorrent/play/' + url_fixed
+                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[COLOR orangered] [Torrent][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                            data = file.readline()
+                            i = i + 1
+                            continue
+                        else:
+                            # plugin://plugin.video.xbmctorrent/play/ + <magnet_link>
+                            title = parser_title(title)
+                            data = data.strip()
+                            url_fixed = urllib.quote_plus(data)                      
+                            title = parser_title(title)                        
+                            url = 'plugin://plugin.video.xbmctorrent/play/' + url_fixed
+                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [COLOR orangered][Torrent][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                             data = file.readline()
                             i = i + 1
                             continue
                         
-                elif data.startswith("magnet") == True:
-                    if busqueda == 'search.txt':
-                        # plugin://plugin.video.xbmctorrent/play/ + <magnet_link>
-                        url_fixed = urllib.quote_plus(data)                      
-                        title = parser_title(title)
-                        url = 'plugin://plugin.video.xbmctorrent/play/' + url_fixed
-                        plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[COLOR orangered] [Torrent][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
-                        data = file.readline()
-                        i = i + 1
-                        continue
-                    else:
-                        # plugin://plugin.video.xbmctorrent/play/ + <magnet_link>
-                        title = parser_title(title)
-                        data = data.strip()
-                        url_fixed = urllib.quote_plus(data)                      
-                        title = parser_title(title)                        
-                        url = 'plugin://plugin.video.xbmctorrent/play/' + url_fixed
-                        plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [COLOR orangered][Torrent][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
-                        data = file.readline()
-                        i = i + 1
-                        continue
-
                 elif data.startswith("sop") == True:
-                    if busqueda == 'search.txt':
-                        title = title.split('"')
-                        title = title[0]
-                        title = title.replace("#EXTINF:-1,", "")
-                        # plugin://plugin.video.p2p-streams/?url=sop://124.232.150.188:3912/11265&mode=2&name=Titulo+canal+Sopcast
-                        url = 'plugin://plugin.video.p2p-streams/?url=' + data + '&mode=2&name=' + title_fixed
-                        url = data
-                        plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[COLOR darkorange] [Sopcast][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
-                        data = file.readline()
-                        i = i + 1
-                        continue
+                    if cat != "":
+                        if busqueda == 'search.txt':
+                            title = title.split('"')
+                            title = title[0]
+                            title = title.replace("#EXTINF:-1,", "")
+                            # plugin://plugin.video.p2p-streams/?url=sop://124.232.150.188:3912/11265&mode=2&name=Titulo+canal+Sopcast
+                            url = 'plugin://plugin.video.p2p-streams/?url=' + data + '&mode=2&name=' + title_fixed
+                            url = data
+                            plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR darkorange] [Sopcast][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                            data = file.readline()
+                            i = i + 1
+                            continue
+                        else:
+                            title = title.split('"')
+                            title = title[0]
+                            title = title.replace("#EXTINF:-1,", "")
+                            url = data
+                            plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + ' [COLOR darkorange][Sopcast][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                            data = file.readline()
+                            i = i + 1
+                            continue
                     else:
-                        title = title.split('"')
-                        title = title[0]
-                        title = title.replace("#EXTINF:-1,", "")
-                        url = data
-                        plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [COLOR darkorange][Sopcast][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
-                        data = file.readline()
-                        i = i + 1
-                        continue
+                        if busqueda == 'search.txt':
+                            title = title.split('"')
+                            title = title[0]
+                            title = title.replace("#EXTINF:-1,", "")
+                            # plugin://plugin.video.p2p-streams/?url=sop://124.232.150.188:3912/11265&mode=2&name=Titulo+canal+Sopcast
+                            url = 'plugin://plugin.video.p2p-streams/?url=' + data + '&mode=2&name=' + title_fixed
+                            url = data
+                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[COLOR darkorange] [Sopcast][/COLOR][I][COLOR lightblue] (' + origen + ')[/COLOR][/I]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                            data = file.readline()
+                            i = i + 1
+                            continue
+                        else:
+                            title = title.split('"')
+                            title = title[0]
+                            title = title.replace("#EXTINF:-1,", "")
+                            url = data
+                            plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [COLOR darkorange][Sopcast][/COLOR]', url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                            data = file.readline()
+                            i = i + 1
+                            continue
+                        
+                        
 
                 elif data.startswith("ace") == True:
-                    if busqueda == 'search.txt':
-                        # plugin://plugin.video.p2p-streams/?url=a55f96dd386b7722380802b6afffc97ff98903ac&mode=1&name=Sky+Sports+title
-                        title = parser_title(title)
-                        url = data.replace("ace:", "")
-                        url = url.strip()
-                        url = 'plugin://plugin.video.p2p-streams/?url=' + url + '&mode=1&name='
-                        plugintools.add_item(action="play" , title = '[COLOR white]' + title + ' [COLOR lightblue][Acestream][/COLOR] [COLOR lightblue][I](' + origen + ')[/COLOR][/I]' , url = url, thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
-                        data = file.readline()
-                        data = data.strip()
-                        i = i + 1
-                        continue                    
+                    if cat != "":
+                        if busqueda == 'search.txt':
+                            # plugin://plugin.video.p2p-streams/?url=a55f96dd386b7722380802b6afffc97ff98903ac&mode=1&name=Sky+Sports+title
+                            title = parser_title(title)
+                            url = data.replace("ace:", "")
+                            url = url.strip()
+                            url = 'plugin://plugin.video.p2p-streams/?url=' + url + '&mode=1&name='
+                            plugintools.add_item(action="play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + ' [COLOR lightblue][Acestream][/COLOR] [COLOR lightblue][I](' + origen + ')[/COLOR][/I]' , url = url, thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
+                            data = file.readline()
+                            data = data.strip()
+                            i = i + 1
+                            continue
+                        else:
+                            title = parser_title(title)
+                            print 'data',data
+                            url = data.replace("ace:", "")
+                            url = url.strip()
+                            print 'url',url
+                            url = 'plugin://plugin.video.p2p-streams/?url=' + url + '&mode=1&name='
+                            plugintools.add_item(action="play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + ' [COLOR lightblue][Acestream][/COLOR]' , url = url, thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
+                            data = file.readline()
+                            data = data.strip()
+                            i = i + 1
+                            continue
                     else:
-                        title = parser_title(title)
-                        print 'data',data
-                        url = data.replace("ace:", "")
-                        url = url.strip()
-                        print 'url',url
-                        url = 'plugin://plugin.video.p2p-streams/?url=' + url + '&mode=1&name='
-                        plugintools.add_item(action="play" , title = '[COLOR white]' + title + ' [COLOR lightblue][Acestream][/COLOR]' , url = url, thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
-                        data = file.readline()
-                        data = data.strip()
-                        i = i + 1
-                        continue                          
+                        if busqueda == 'search.txt':
+                            # plugin://plugin.video.p2p-streams/?url=a55f96dd386b7722380802b6afffc97ff98903ac&mode=1&name=Sky+Sports+title
+                            title = parser_title(title)
+                            url = data.replace("ace:", "")
+                            url = url.strip()
+                            url = 'plugin://plugin.video.p2p-streams/?url=' + url + '&mode=1&name='
+                            plugintools.add_item(action="play" , title = '[COLOR white]' + title + ' [COLOR lightblue][Acestream][/COLOR] [COLOR lightblue][I](' + origen + ')[/COLOR][/I]' , url = url, thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
+                            data = file.readline()
+                            data = data.strip()
+                            i = i + 1
+                            continue
+                        else:
+                            title = parser_title(title)
+                            print 'data',data
+                            url = data.replace("ace:", "")
+                            url = url.strip()
+                            print 'url',url
+                            url = 'plugin://plugin.video.p2p-streams/?url=' + url + '&mode=1&name='
+                            plugintools.add_item(action="play" , title = '[COLOR white]' + title + ' [COLOR lightblue][Acestream][/COLOR]' , url = url, thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
+                            data = file.readline()
+                            data = data.strip()
+                            i = i + 1
+                            continue                        
                 
                 # Youtube playlist & channel    
                 elif data.startswith("yt") == True:
