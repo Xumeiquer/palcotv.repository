@@ -81,7 +81,7 @@ def run():
 # Main menu
 
 def main_list(params):
-    plugintools.log("[PalcoTV-0.3.0].main_list "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].main_list "+repr(params))
    
     # Control del skin de PalcoTV
     mastermenu = xml_skin()
@@ -139,7 +139,7 @@ def main_list(params):
                
 
 def play(params):
-    plugintools.log("[PalcoTV-0.3.0].play "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].play "+repr(params))
     # plugintools.direct_play(params.get("url"))
     # xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(params.get("url"))
     plugintools.log("[PalcoTV 0.2.85]: Playing file...")
@@ -160,6 +160,8 @@ def play(params):
             vk(params)
         elif url.find("nowvideo") >= 0 :
             nowvideo(params)
+        elif url.find("tumi") >= 0 :
+            tumi(params)            
         else:
             url = params.get("url")
             plugintools.play_resolved_url(url)
@@ -177,7 +179,7 @@ def runPlugin(url):
 
 
 def live_items_withlink(params):
-    plugintools.log("[PalcoTV-0.3.0].live_items_withlink "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].live_items_withlink "+repr(params))
     data = plugintools.read(params.get("url"))
 
     # ToDo: Agregar función lectura de cabecera (fanart, thumbnail, título, últ. actualización)
@@ -203,7 +205,7 @@ def live_items_withlink(params):
 
   
 def xml_lists(params):
-    plugintools.log("[PalcoTV-0.3.0].xml_lists "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].xml_lists "+repr(params))
     data = plugintools.read( params.get("url") )
     name_channel = params.get("title")
     name_channel = parser_title(name_channel)
@@ -235,7 +237,7 @@ def xml_lists(params):
 
             
 def getstreams_now(params):
-    plugintools.log("[PalcoTV-0.3.0].getstreams_now "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].getstreams_now "+repr(params))
     
     data = plugintools.read( params.get("url") )
     poster = plugintools.find_single_match(data, '<poster>(.*?)</poster>')
@@ -252,7 +254,7 @@ def getstreams_now(params):
 # Soporte de listas de canales por categorías (Livestreams, XBMC México, Motor SportsTV, etc.). 
 
 def livestreams_channels(params):
-    plugintools.log("[PalcoTV-0.3.0].livestreams_channels "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].livestreams_channels "+repr(params))
     data = plugintools.read( params.get("url") )
        
     # Extract directory list
@@ -282,7 +284,7 @@ def livestreams_channels(params):
    
         
 def livestreams_subchannels(params):
-    plugintools.log("[PalcoTV-0.3.0].livestreams_subchannels "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].livestreams_subchannels "+repr(params))
 
     data = plugintools.read( params.get("url") )
     # title_channel = params.get("title")
@@ -300,7 +302,7 @@ def livestreams_subchannels(params):
 
 # Pendiente de cargar thumbnail personalizado y fanart...
 def livestreams_subitems(params):
-    plugintools.log("[PalcoTV-0.3.0].livestreams_subitems "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].livestreams_subitems "+repr(params))
 
     title_subchannel = params.get("title")
     data = plugintools.read( params.get("url") )
@@ -317,7 +319,7 @@ def livestreams_subitems(params):
 
 
 def livestreams_items(params):
-    plugintools.log("[PalcoTV-0.3.0].livestreams_items "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].livestreams_items "+repr(params))
 
     title_subchannel = params.get("title")
     plugintools.log("title= "+title_subchannel)    
@@ -351,7 +353,7 @@ def livestreams_items(params):
 
 
 def xml_items(params):
-    plugintools.log("[PalcoTV-0.3.0].xml_items "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].xml_items "+repr(params))
     data = plugintools.read( params.get("url") )
     thumbnail = params.get("thumbnail")
 
@@ -374,7 +376,7 @@ def xml_items(params):
 
              
 def simpletv_items(params):
-    plugintools.log("[PalcoTV-0.3.0].simpletv_items "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].simpletv_items "+repr(params))
 
     # Obtenemos fanart y thumbnail del diccionario
     thumbnail = params.get("thumbnail")
@@ -596,7 +598,7 @@ def simpletv_items(params):
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()                            
-                                plugintools.add_item( action = "vk" , title = '[COLOR white]' + title + '[COLOR lavender] [Vk][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "vk" , title = '[COLOR white]' + title + '[COLOR royalblue] [Vk][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue
@@ -608,7 +610,16 @@ def simpletv_items(params):
                                 plugintools.add_item( action = "nowvideo" , title = '[COLOR white]' + title + '[COLOR red] [Nowvideo][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
-                                continue                            
+                                continue
+                            
+                            elif url.find("tumi") >= 0:
+                                title = title.split('"')
+                                title = title[0]
+                                title = title.strip()                            
+                                plugintools.add_item( action = "tumi" , title = '[COLOR white]' + title + '[COLOR forestgreen] [Tumi][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                              
 
                             elif url.find("www.youtube.com") >= 0:  # Video youtube
                                 plugintools.log("linea titulo= "+title_search)
@@ -626,7 +637,7 @@ def simpletv_items(params):
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()                            
-                                plugintools.add_item( action = "playedto" , title = '[COLOR white]' + title + '[COLOR purple] [m3u8][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "play" , title = '[COLOR white]' + title + '[COLOR purple] [m3u8][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue                            
@@ -672,6 +683,24 @@ def simpletv_items(params):
                                 data = file.readline()
                                 i = i + 1
                                 continue
+                            
+                            elif url.find("vk") >= 0:                            
+                                plugintools.add_item( action = "vk" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR royalblue] [Vk][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                            
+
+                            elif url.find("nowvideo") >= 0:                            
+                                plugintools.add_item( action = "nowvideo" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR red] [Nowvideo][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue
+
+                            elif url.find("tumi") >= 0:                            
+                                plugintools.add_item( action = "tumi" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR forestgreen] [Tumi][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                            
 
                             elif url.find("9stream") >= 0:                            
                                 plugintools.add_item( action = "ninestreams" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR green] [9stream][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
@@ -694,7 +723,7 @@ def simpletv_items(params):
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()                            
-                                plugintools.add_item( action = "playedto" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR purple] [m3u8][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "play" , title = '[COLOR red][I]' + cat + ' / [/I][/COLOR][COLOR white] ' + title + '[COLOR purple] [m3u8][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue                             
@@ -767,7 +796,16 @@ def simpletv_items(params):
                                 plugintools.add_item( action = "nowvideo" , title = '[COLOR white]' + title + '[COLOR red] [Nowvideo][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
-                                continue                             
+                                continue
+
+                            elif url.find("tumi.tv") >= 0:
+                                title = title.split('"')
+                                title = title[0]
+                                title = title.strip()                             
+                                plugintools.add_item( action = "tumi" , title = '[COLOR white]' + title + '[COLOR forestgreen] [Tumi][/COLOR][I][COLOR lightsalmon] (' + origen + ')[/COLOR][/I]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                              
 
                             elif url.find("www.youtube.com") >= 0:
                                 title = title.split('"')
@@ -783,7 +821,7 @@ def simpletv_items(params):
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()                            
-                                plugintools.add_item( action = "playedto" , title = '[COLOR white]' + title + ' [COLOR purple][m3u8][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [COLOR purple][m3u8][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue                             
@@ -833,6 +871,12 @@ def simpletv_items(params):
                                 i = i + 1
                                 continue
 
+                            elif url.find("tumi.tv") >= 0:                            
+                                plugintools.add_item( action = "tumi" , title = '[COLOR white]' + title + '[COLOR forestgreen] [Tumi][/COLOR]' , url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                data = file.readline()
+                                i = i + 1
+                                continue                            
+
                             elif url.find("www.youtube.com") >= 0:
                                 title = title.split('"')
                                 title = title[0]
@@ -849,7 +893,7 @@ def simpletv_items(params):
                                 title = title.split('"')
                                 title = title[0]
                                 title = title.strip()                            
-                                plugintools.add_item( action = "playedto" , title = '[COLOR white]' + title + ' [COLOR purple][m3u8][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
+                                plugintools.add_item( action = "play" , title = '[COLOR white]' + title + ' [COLOR purple][m3u8][/COLOR]', url = url ,  thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True )
                                 data = file.readline()
                                 i = i + 1
                                 continue                             
@@ -1295,7 +1339,7 @@ def simpletv_items(params):
 
            
 def myplaylists_m3u(params):  # Mis listas M3U
-    plugintools.log("[PalcoTV-0.3.0].myplaylists_m3u "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].myplaylists_m3u "+repr(params))
     thumbnail = params.get("thumbnail")
     plugintools.add_item(action="play" , title = "[COLOR red][B][Tutorial][/B][COLOR lightyellow]: Importar listas M3U a mi biblioteca [/COLOR][COLOR blue][I][Youtube][/I][/COLOR]" , thumbnail = art + "icon.png" , url = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=8i0KouM-4-U" , folder = False , isPlayable = True )
     plugintools.add_item(action="search_channel" , title = "[B][COLOR lightyellow]Buscador de canales[/COLOR][/B][COLOR lightblue][I] Nuevo![/I][/COLOR]" , thumbnail = art + "search.png" , fanart = art + 'fanart.jpg' , folder = True , isPlayable = False )
@@ -1354,7 +1398,7 @@ def myplaylists_m3u(params):  # Mis listas M3U
                 
 
 def playlists_m3u(params):  # Biblioteca online
-    plugintools.log("[PalcoTV-0.3.0].playlists_m3u "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].playlists_m3u "+repr(params))
     data = plugintools.read( params.get("url") )
     name_channel = params.get("plot")
     pattern = '<name>'+name_channel+'(.*?)</channel>'
@@ -1397,12 +1441,12 @@ def playlists_m3u(params):  # Biblioteca online
 
 
 
-    plugintools.log("[PalcoTV-0.3.0].playlists_m3u "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].playlists_m3u "+repr(params))
 
     
         
 def getfile_http(params):  # Descarga de lista M3U + llamada a simpletv_items para que liste los items
-    plugintools.log("[PalcoTV-0.3.0].getfile_http "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].getfile_http "+repr(params))
     url = params.get("url")
     params["ext"] = "m3u"
     getfile_url(params)
@@ -1423,7 +1467,7 @@ def parse_url(url):
         
                     
 def getfile_url(params):
-    plugintools.log("[PalcoTV-0.3.0].getfile_url " +repr(params))
+    plugintools.log("[PalcoTV-0.3.02].getfile_url " +repr(params))
     ext = params.get("ext")
     title = params.get("title")
 
@@ -1478,7 +1522,7 @@ def getfile_url(params):
 
 
 def header_xml(params):
-    plugintools.log("[PalcoTV-0.3.0].header_xml "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].header_xml "+repr(params))
 
     url = params.get("url")
     params.get("title")
@@ -1507,7 +1551,7 @@ def header_xml(params):
 
 
 def search_channel(params):
-    plugintools.log("[PalcoTV-0.3.0].search " + repr(params))
+    plugintools.log("[PalcoTV-0.3.02].search " + repr(params))
 
     buscar = params.get("plot")
     # plugintools.log("buscar texto: "+buscar)
@@ -1835,7 +1879,7 @@ def search_channel(params):
 
 
 def agendatv(params):
-    plugintools.log("[PalcoTV-0.3.0].agendatv "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].agendatv "+repr(params))
 
     hora_partidos = []
     lista_equipos=[]
@@ -2033,7 +2077,7 @@ def encode_string(url):
 
 
 def plx_items(params):
-    plugintools.log("[PalcoTV-0.3.0].plx_items" +repr(params))
+    plugintools.log("[PalcoTV-0.3.02].plx_items" +repr(params))
 
     fanart = ""
     thumbnail = ""
@@ -2347,7 +2391,12 @@ def plx_items(params):
                         if url.find("nowvideo") >= 0:
                             plugintools.add_item(action="nowvideo" , title = title + ' [COLOR red][Nowvideo][/COLOR]' , url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
                             plugintools.log("URL= "+url)
-                            break                        
+                            break
+
+                        if url.find("tumi.tv") >= 0:
+                            plugintools.add_item(action="tumi" , title = title + ' [COLOR forestgreen][Tumi][/COLOR]' , url = url , thumbnail = thumbnail , fanart = fanart , folder = False , isPlayable = True)
+                            plugintools.log("URL= "+url)
+                            break                           
 
                         elif url.endswith("flv") == True:
                             plugintools.log("URL= "+url)
@@ -2590,7 +2639,7 @@ def plx_items(params):
 
 
 def futbolenlatv(params):
-    plugintools.log("[PalcoTV-0.3.0].futbolenlaTV "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].futbolenlaTV "+repr(params))
 
     hora_partidos = []
     lista_equipos=[]
@@ -2867,7 +2916,7 @@ def futbolenlatv(params):
          
 
 def encode_string(txt):
-    plugintools.log("[PalcoTV-0.3.0].encode_string: "+txt)
+    plugintools.log("[PalcoTV-0.3.02].encode_string: "+txt)
     
     txt = txt.replace("&#231;", "ç")
     txt = txt.replace('&#233;', 'é')
@@ -2887,7 +2936,7 @@ def encode_string(txt):
 
 
 def splive_items(params):
-    plugintools.log("[PalcoTV-0.3.0].SPlive_items "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].SPlive_items "+repr(params))
     data = plugintools.read( params.get("url") )
 
     channel = plugintools.find_multiple_matches(data,'<channel>(.*?)</channel>')
@@ -2958,7 +3007,7 @@ def get_fecha():
 
 
 def p2p_items(params):
-    plugintools.log("[PalcoTV-0.3.0].p2p_items" +repr(params))
+    plugintools.log("[PalcoTV-0.3.02].p2p_items" +repr(params))
     
     # Vamos a localizar el título 
     title = params.get("plot")
@@ -3118,7 +3167,7 @@ def p2p_items(params):
 
 
 def contextMenu(params):
-    plugintools.log("[PalcoTV-0.3.0].contextMenu " +repr(params))
+    plugintools.log("[PalcoTV-0.3.02].contextMenu " +repr(params))
 
     dialog = xbmcgui.Dialog()
     plot = params.get("plot")
@@ -3261,7 +3310,7 @@ def contextMenu(params):
 
 
 def magnet_items(params):
-    plugintools.log("[PalcoTV-0.3.0].magnet_items" +repr(params))
+    plugintools.log("[PalcoTV-0.3.02].magnet_items" +repr(params))
     
     plot = params.get("plot")
     
@@ -3317,7 +3366,7 @@ def magnet_items(params):
             
 
 def parse_channel(txt):
-    plugintools.log("[PalcoTV-0.3.0].encode_string: "+txt)
+    plugintools.log("[PalcoTV-0.3.02].encode_string: "+txt)
 
     txt = txt.rstrip()
     txt = txt.lstrip() 
@@ -3325,7 +3374,7 @@ def parse_channel(txt):
 
 
 def futbolenlatv_manana(params):
-    plugintools.log("[PalcoTV-0.3.0].futbolenlatv " + repr(params))
+    plugintools.log("[PalcoTV-0.3.02].futbolenlatv " + repr(params))
     
     # Fecha de mañana
     import datetime
@@ -3375,7 +3424,7 @@ def futbolenlatv_manana(params):
 
 
 def parser_title(title):
-    plugintools.log("[PalcoTV-0.3.0].parser_title " + title)
+    plugintools.log("[PalcoTV-0.3.02].parser_title " + title)
 
     cyd = title
 
@@ -3430,7 +3479,7 @@ def parser_title(title):
 
 
 def json_items(params):
-    plugintools.log("[PalcoTV-0.3.0].json_items "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].json_items "+repr(params))
     data = plugintools.read(params.get("url"))
 
     # Título y autor de la lista
@@ -3494,7 +3543,8 @@ def json_items(params):
                 if thumbnail == "":
                     thumbnail = params.get("thumbnail")
                     
-                plugintools.add_item( action="allmyvideos" , title = title + ' [COLOR lightyellow][Allmyvideos][/COLOR]' , url = url , fanart = fanart , thumbnail = thumbnail , folder = False , isPlayable = True )                
+                plugintools.add_item( action="allmyvideos" , title = title + ' [COLOR lightyellow][Allmyvideos][/COLOR]' , url = url , fanart = fanart , thumbnail = thumbnail , folder = False , isPlayable = True )
+                
             elif url.find("streamcloud") >= 0:
                 url = url.replace(",", "")
                 plugintools.log("url= "+url)
@@ -3534,6 +3584,8 @@ def json_items(params):
                 if thumbnail == "":
                     thumbnail = params.get("thumbnail")
 
+                plugintools.add_item( action="vidspot" , title = title + ' [COLOR palegreen][Vidspot][/COLOR]' , url = url , fanart = fanart , thumbnail = thumbnail , folder = False , isPlayable = True )                    
+
             if url.find("vk.com")>= 0:
                 url = url.replace(",", "")
                 plugintools.log("url= "+url)
@@ -3546,7 +3598,23 @@ def json_items(params):
                 if thumbnail == "":
                     thumbnail = params.get("thumbnail")
 
+                plugintools.add_item( action="vk" , title = title + ' [COLOR royalblue][Vk][/COLOR]' , url = url , fanart = fanart , thumbnail = thumbnail , folder = False , isPlayable = True )                    
+
             if url.find("nowvideo")>= 0:
+                url = url.replace(",", "")
+                plugintools.log("url= "+url)
+                fanart = params.get("extra")
+                thumbnail = plugintools.find_single_match(entry,'"image":(.*?)\n')
+                thumbnail = thumbnail.replace('"', "")
+                thumbnail = thumbnail.replace(',', "") 
+                thumbnail = thumbnail.strip()               
+                plugintools.log("thumbnail= "+thumbnail)
+                if thumbnail == "":
+                    thumbnail = params.get("thumbnail")
+                    
+                plugintools.add_item( action="nowvideo" , title = title + ' [COLOR palegreen][Nowvideo][/COLOR]' , url = url , fanart = fanart , thumbnail = thumbnail , folder = False , isPlayable = True )                    
+
+            if url.find("tumi")>= 0:
                 url = url.replace(",", "")
                 plugintools.log("url= "+url)
                 fanart = params.get("extra")
@@ -3558,7 +3626,7 @@ def json_items(params):
                 if thumbnail == "":
                     thumbnail = params.get("thumbnail")                    
                     
-                plugintools.add_item( action="vidspot" , title = title + ' [COLOR palegreen][Vidspot][/COLOR]' , url = url , fanart = fanart , thumbnail = thumbnail , folder = False , isPlayable = True )
+                plugintools.add_item( action="tumi" , title = title + ' [COLOR forestgreen][Tumi][/COLOR]' , url = url , fanart = fanart , thumbnail = thumbnail , folder = False , isPlayable = True )
                 
             else:
                 # Canales no reproducibles en XBMC (de momento)
@@ -3582,7 +3650,7 @@ def json_items(params):
 
 
 def youtube_playlists(params):
-    plugintools.log("[PalcoTV-0.3.0].youtube_playlists "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].youtube_playlists "+repr(params))
     
     data = plugintools.read( params.get("url") )
         
@@ -3605,7 +3673,7 @@ def youtube_playlists(params):
 
 # Muestra todos los vídeos del playlist de Youtube
 def youtube_videos(params):
-    plugintools.log("[PalcoTV-0.3.0].youtube_videos "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].youtube_videos "+repr(params))
     
     # Fetch video list from YouTube feed
     data = plugintools.read( params.get("url") )
@@ -3633,7 +3701,7 @@ def youtube_videos(params):
 
 
 def server_rtmp(params):
-    plugintools.log("[PalcoTV-0.3.0].server_rtmp " + repr(params))
+    plugintools.log("[PalcoTV-0.3.02].server_rtmp " + repr(params))
 
     url = params.get("url")
     plugintools.log("URL= "+url)
@@ -3795,7 +3863,7 @@ def server_rtmp(params):
         return params
 
 def launch_rtmp(params):
-    plugintools.log("[PalcoTV-0.3.0].launch_rtmp " + repr(params))
+    plugintools.log("[PalcoTV-0.3.02].launch_rtmp " + repr(params))
 
     url = params.get("url")
     plugintools.log("URL= "+url)
@@ -3969,7 +4037,7 @@ def launch_rtmp(params):
   
 
 def peliseries(params):
-    plugintools.log("[PalcoTV-0.3.0].peliseries " +repr(params))
+    plugintools.log("[PalcoTV-0.3.02].peliseries " +repr(params))
 
     # Abrimos archivo remoto
     url = params.get("url")
@@ -4062,7 +4130,7 @@ def peliseries(params):
     
 
 def tinyurl(params):
-    plugintools.log("[PalcoTV-0.3.0].tinyurl "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].tinyurl "+repr(params))
 
     url = params.get("url")
     url_getlink = 'http://www.getlinkinfo.com/info?link=' +url
@@ -4092,7 +4160,7 @@ def tinyurl(params):
 
 # Conexión con el servicio longURL.org para obtener URL original      
 def longurl(params):
-    plugintools.log("[PalcoTV-0.3.0].longURL "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].longURL "+repr(params))
 
     url = params.get("url")
     url_getlink = 'http://api.longurl.org/v2/expand?url=' +url
@@ -4128,7 +4196,7 @@ def opentxt(self):
      
 
 def arenavision_parser(params):
-    plugintools.log("[PalcoTV-0.3.0].arenavision_parser "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].arenavision_parser "+repr(params))
     
     url = params.get("url")
     thumbnail = params.get("thumbnail")
@@ -4146,7 +4214,7 @@ def arenavision_parser(params):
 
 
 def parse_av_channel(title, url, params):
-    plugintools.log("[PalcoTV-0.3.0].parse_av_channel "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].parse_av_channel "+repr(params))
     
     data = plugintools.read(url)
     fanart = params.get("fanart")
@@ -4167,7 +4235,7 @@ def encode_url(url):
 
 
 def seriecatcher(params):
-    plugintools.log("[PalcoTV-0.3.0].seriecatcher "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].seriecatcher "+repr(params))
     
     url = params.get("url")
     fanart = params.get("extra")
@@ -4177,7 +4245,7 @@ def seriecatcher(params):
 
 
 def GetSerieChapters(params):
-    plugintools.log("[PalcoTV-0.3.0].GetSerieChapters "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].GetSerieChapters "+repr(params))
 
     season = params.get("season")
     data = plugintools.read(params.get("url"))
@@ -4202,7 +4270,7 @@ def GetSerieChapters(params):
         
     
 def GetSerieLinks(fanart , url_cap_fixed, i, title_fixed):
-    plugintools.log("[PalcoTV-0.3.0].GetSerieLinks")
+    plugintools.log("[PalcoTV-0.3.02].GetSerieLinks")
     
     data = plugintools.read(url_cap_fixed)
     amv = plugintools.find_multiple_matches(data, 'allmyvideos.net/(.*?)"')
@@ -4226,11 +4294,25 @@ def GetSerieLinks(fanart , url_cap_fixed, i, title_fixed):
 
     for entry in plydt:
         plydt_url = 'http://played.to/' + entry
-        plugintools.add_item(action="play" , title = title_fixed + '[COLOR lavender] [Played.to][/COLOR]', url = plydt_url , thumbnail = thumbnail_fixed , fanart = fanart , folder = False , isPlayable = True)    
+        plugintools.add_item(action="play" , title = title_fixed + '[COLOR lavender] [Played.to][/COLOR]', url = plydt_url , thumbnail = thumbnail_fixed , fanart = fanart , folder = False , isPlayable = True)
+
+    for entry in plydt:
+        plydt_url = 'vk.com' + entry
+        plugintools.add_item(action="play" , title = title_fixed + '[COLOR royalblue] [Vk][/COLOR]', url = plydt_url , thumbnail = thumbnail_fixed , fanart = fanart , folder = False , isPlayable = True)
+
+    for entry in plydt:
+        plydt_url = 'nowvideo.sx' + entry
+        plugintools.add_item(action="play" , title = title_fixed + '[COLOR red] [Nowvideo][/COLOR]', url = plydt_url , thumbnail = thumbnail_fixed , fanart = fanart , folder = False , isPlayable = True)           
+
+    for entry in plydt:
+        plydt_url = 'http://tumi.tv/' + entry
+        plugintools.add_item(action="play" , title = title_fixed + '[COLOR forestgreen] [Tumi][/COLOR]', url = plydt_url , thumbnail = thumbnail_fixed , fanart = fanart , folder = False , isPlayable = True)
+
+        
         
 
 def SelectTemp(params, temp):
-    plugintools.log("[PalcoTV-0.3.0].SelectTemp "+repr(params))
+    plugintools.log("[PalcoTV-0.3.02].SelectTemp "+repr(params))
 
     seasons = len(temp)
     
@@ -4278,7 +4360,7 @@ def SelectTemp(params, temp):
             
 
 def m3u_items(title):
-    plugintools.log("[PalcoTV-0.3.0].m3u_items= "+title)
+    plugintools.log("[PalcoTV-0.3.02].m3u_items= "+title)
 
     thumbnail = art + 'icon.png'
     fanart = art + 'fanart.jpg'
@@ -4347,7 +4429,7 @@ def m3u_items(title):
 
 
 def xml_skin():
-    plugintools.log("[PalcoTV-0.3.0].xml_skin")
+    plugintools.log("[PalcoTV-0.3.02].xml_skin")
 
     mastermenu = plugintools.get_setting("mastermenu")
     xmlmaster = plugintools.get_setting("xmlmaster")

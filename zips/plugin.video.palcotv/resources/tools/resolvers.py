@@ -266,7 +266,8 @@ def nowvideo(params):
         video_id = plugintools.find_single_match(data, 'flashvars.file="([^"]+)')
         filekey = plugintools.find_single_match(data, 'flashvars.filekey=([^;]+)')
 
-        # En la página nos da el token de esta forma (siendo fkzd el filekey): var fkzd="83.47.1.12-8d68210314d70fb6506817762b0d495e";
+        # En la página nos da el token de esta forma (siendo fkzd el filekey): var fkzd="83.47.1.12-8d68210314d70fb6506817762b0d495e";
+
         token_txt = 'var '+filekey
         #plugintools.log("token_txt= "+token_txt)
         token = plugintools.find_single_match(data, filekey+'=\"([^"]+)')
@@ -290,7 +291,8 @@ def nowvideo(params):
             request_headers.append(["Referer",referer])
             body,response_headers = plugintools.read_body_and_headers(url, headers=request_headers)
             # plugintools.log("data= "+body)
-            # body= url=http://s173.coolcdn.ch/dl/04318aa973a3320b8ced6734f0c20da3/5440513e/ffe369cb0656c0b8de31f6ef353bcff192.flv&title=The.Black.Rider.Revelation.Road.2014.DVDRip.X264.AC3PLAYNOW.mkv%26asdasdas&site_url=http://www.nowvideo.sx/video/b5c8c44fc706f&seekparm=&enablelimit=0
+            # body= url=http://s173.coolcdn.ch/dl/04318aa973a3320b8ced6734f0c20da3/5440513e/ffe369cb0656c0b8de31f6ef353bcff192.flv&title=The.Black.Rider.Revelation.Road.2014.DVDRip.X264.AC3PLAYNOW.mkv%26asdasdas&site_url=http://www.nowvideo.sx/video/b5c8c44fc706f&seekparm=&enablelimit=0
+
             body = body.replace("url=", "")
             body = body.split("&")
 
@@ -310,13 +312,35 @@ def nowvideo(params):
         flashvars.filekey=fkzd;
         flashvars.advURL="0";
         flashvars.autoplay="false";
-        flashvars.cid="1";
+        flashvars.cid="1";
+
 '''
 
 
-         
+def tumi(params):
+    plugintools.log("[PalcoTV[0.3.0].Tumi "+repr(params))
 
-        
+    data = plugintools.read(params.get("url"))
     
+    if "Video is processing now" in data:
+        xbmc.executebuiltin("Notification(%s,%s,%i,%s)" % ('PalcoTV', "El archivo está en proceso", 3 , art+'icon.png'))       
+    else:
+        # Vamos a buscar el ID de la página embebida
+        matches = plugintools.find_multiple_matches(data, 'add_my_acc=(.*?)\"')
+        for entry in matches:
+            print 'match',entry
+            # http://tumi.tv/embed-i9l4mr7jph1a.html
+            url = 'http://tumi.tv/embed-' + entry + '.html'
+            
+            # Petición HTTP de esa URL
+            request_headers=[]
+            request_headers.append(["User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31"])
+            request_headers.append(["Referer",params.get("url")])
+            body,response_headers = plugintools.read_body_and_headers(url, headers=request_headers)
+            plugintools.log("body= "+body)
+            video_url= plugintools.find_single_match(body, 'file\: \"(.*?)\"')
+            plugintools.log("video_url= "+video_url)
+            plugintools.add_item(action="play", title= "hola" , url = video_url , folder = False , isPlayable = True)
+            plugintools.play_resolved_url(video_url)
 
-                
+            
