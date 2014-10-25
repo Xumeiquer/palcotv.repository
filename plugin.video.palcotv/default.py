@@ -42,6 +42,8 @@ from resources.tools.updater import *
 from resources.tools.new_regex import *
 
 
+__version__ = "0.3.03"
+
 
 home = xbmc.translatePath(os.path.join('special://home/addons/plugin.video.palcotv/', ''))
 tools = xbmc.translatePath(os.path.join('special://home/addons/plugin.video.palcotv/resources/tools', ''))
